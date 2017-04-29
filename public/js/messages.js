@@ -1,9 +1,9 @@
 
 // Variables
-var template1 = ["templates/template_1.html", "templates/template_1.css"],
-    template2 = ["templates/template_2.html", "templates/template_2.css"],
-    template3 = ["templates/template_3.html", "templates/template_3.css"],
-    imagePath = "Images/SampleImage";
+var template1 = ["../templates/template_1.html", "../templates/template_1.css"],
+    template2 = ["../templates/template_2.html", "../templates/template_2.css"],
+    template3 = ["../templates/template_3.html", "../templates/template_3.css"],
+    imagePath = "../Images/SampleImage";
 
 /*
 Constructor for a display message
