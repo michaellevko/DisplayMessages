@@ -1,12 +1,36 @@
 // server.js
 
 // modules =================================================
-var express = require('express');
+var express     = require('express');
+var path        = require('path');
+
+// run server ==============================================
 var app = express();
 
-// set static files location
-app.use(express.static('public'));
+// configure ===============================================
+app.use(express.static(path.join(__dirname, 'public')));
 
+// set static files location
+// app.use(express.static('public'));
+
+
+app.get('/screen=:id', function (request, response) {
+    var screenId = request.params.id;
+
+    response.sendFile(path.join(__dirname, "/public/templates/template_" + screenId + ".html"));
+});
+
+/*
+ * default route for DisplayMessages app
+ * returns index.html with default message
+ */
 app.get('/', function (request, response) {
-    response.sendFile(__dirname + "/public/index.html");
-}).listen(8080);
+    response.sendFile(path.join(__dirname, "/public/index.html"));
+});
+
+// fire up the engines ! ==================================
+app.listen(8080);
+
+/*
+ *
+ */

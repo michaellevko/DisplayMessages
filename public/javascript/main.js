@@ -49,7 +49,7 @@ function getCurrMessage(messages) {
  * Using anonymous selecting for generic method for all templates
  */
 function loadDisplay(message) {
-    if (message != undefined) {
+    if (message !== undefined) {
         $("body").load(message.template[0] + " #container", function () {
             setMsgData(message);
             setCSS(message.template[1]);
