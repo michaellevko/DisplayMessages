@@ -5,16 +5,24 @@
  * data and templates accordingly.
  */
 function refreshDisplay() {
-    var messages = initMessages();
-    var currMsg = getCurrMessage(messages);
-    loadDisplay(currMsg);
-    setTimeout('refreshDisplay()', 5000);
+    // Check messages only for /screen routes
+    var h = $('body > h1');
+    if (h[0].innerHTML.indexOf('Screen') > -1) {
+        // request messages from server based on screenId
+        var screenId = (h[0].innerHTML.split('-'))[1];
+        $.get('/update/' + screenId, function (messages) {
+            var currMsg = getCurrMessage(messages);
+            loadDisplay(currMsg);
+            setTimeout('refreshDisplay()', 10000);
+        });
+    }
 }
 
-/*
- * Returns message from 'messages' array argument
- * according to timeFrame attribute
- */
+// /*
+//  * Sends HTTP GET request to server for messages
+//  * corresponding with screenId from browser url
+//  * Returns array of messages matching screenId
+//  */
 function getCurrMessage(messages) {
     // Variables
     var currMessage;               // message to return
@@ -32,9 +40,8 @@ function getCurrMessage(messages) {
     // matching current timeframe
     for (m in messages) {
         // Check timeFrame match
-        if (checkDates(messages[m].timeFrames.Date, dDate) &&
-            checkDays(messages[m].timeFrames.Days, dDay) &&
-            checkTime(messages[m].timeFrames.Hours, dHHMM)) {
+        if (checkDates(messages[m].timeFrames.dates, dDate) &&
+            checkWeekly(messages[m].timeFrames.weekly, dDay, dHHMM)) {
                 currMessage = messages[m];
                 break;
         }
@@ -50,13 +57,13 @@ function getCurrMessage(messages) {
  */
 function loadDisplay(message) {
     if (message !== undefined) {
-        $("body").load(message.template[0] + " #container", function () {
+        $("div#parent").load(message.template.html + " #container", function () {
             setMsgData(message);
-            setCSS(message.template[1]);
+            setCSS(message.template.css);
         });
     } else {
-        $("body").load("index.html #default");
-        setCSS("templates/default.css");
+        $("div#parent").load("templates/default.html #default");
+        setCSS("");
     }
 }
 
@@ -65,12 +72,12 @@ function loadDisplay(message) {
  */
 function setMsgData(message) {
     var textFields = $(".text");
-    for (i=0; i<message.textFields.length; i++) {
-        textFields[i].innerHTML = message.textFields[i];
+    for (i=0; i<message.texts.length; i++) {
+        textFields[i].innerHTML = message.texts[i];
     }
     var imgFields = $(".img");
-    for (i=0; i<message.imgFields.length; i++) {
-        imgFields[i].src = message.imgFields[i];
+    for (i=0; i<message.images.length; i++) {
+        imgFields[i].src = message.images[i];
     }
 }
 
@@ -78,11 +85,13 @@ function setMsgData(message) {
  * Replaces current css in index.html with template_x.css
  */
 function setCSS(cssFile) {
-    var link = $("head > link");
+    var link = $('link#DynamicCSS');
     if (link.length > 0) {
         link.remove()
     }
-    $("head").append("<link rel='stylesheet' href="+cssFile+" type='text/css' />");
+    if (cssFile !== "") {
+        $("head").append("<link id='DynamicCSS' rel='stylesheet' href=" + cssFile + " />");
+    }
 }
 
 /*
@@ -91,9 +100,27 @@ function setCSS(cssFile) {
  */
 function checkDates(currMsgDates, currDate) {
     var isValid = false;
-    if (currMsgDates[0] <= currDate &&
-        currMsgDates[1] > currDate) {
+    if (new Date(currMsgDates[0]) <= currDate &&
+        new Date(currMsgDates[1]) > currDate) {
         isValid = true;
+    }
+    return isValid;
+}
+
+/*
+ * Checks for each weekly timeframe of message
+ * against current time
+ * Returns true if match is found
+ */
+function checkWeekly(currMsgWeekly, dDay, ddHMM) {
+    var isValid = false;
+    for(x in currMsgWeekly) {
+        if(checkDays(currMsgWeekly[x].days, dDay)) {
+            if(checkHour(currMsgWeekly[x].hours, ddHMM)) {
+                isValid = true;
+                break;
+            }
+        }
     }
     return isValid;
 }
@@ -117,7 +144,7 @@ function checkDays(currMsgDays, currDay) {
  * Checks if message hours match current hour.
  * Returns true if match, false otherwise.
  */
-function checkTime(currMsgHours, currHour) {
+function checkHour(currMsgHours, currHour) {
     var isValid = false;
     if (currMsgHours[0] <= currHour &&
         currMsgHours[1] > currHour) {

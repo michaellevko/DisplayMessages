@@ -11,7 +11,7 @@
         "css" : "templates/template_1.css"},
       "displayDuration" : 0,
       "timeFrames" : {
-        "dates" : ["2017"],
+        "dates" : ["2016-01-01", "2016-12-31"],
         "weekly" : [
           {
             "days" : [1],
@@ -35,7 +35,7 @@
         "css" : "templates/template_2.css"},
       "displayDuration" : 0,
       "timeFrames" : {
-        "dates" : ["2017-03-01", "2017-04-30"],
+        "dates" : ["2016-03-01", "2016-04-30"],
         "weekly" : [
           {
             "days" : [2, 3],
@@ -52,7 +52,7 @@
         "css" : "templates/template_3.css"},
       "displayDuration" : 0,
       "timeFrames" : {
-        "dates" : ["2017-05-01", "2017-06-15"],
+        "dates" : ["2016-05-01", "2016-06-15"],
         "weekly" : [
           {
             "days" : [0, 1, 2, 3, 4, 5, 6],
@@ -70,7 +70,7 @@
         "css" : "templates/template_1.css"},
       "displayDuration" : 0,
       "timeFrames" : {
-        "dates" : ["2017-03-29", "2017-04-15"],
+        "dates" : ["2016-03-29", "2016-04-15"],
         "weekly" : [
           {
             "days" : [1],
@@ -90,7 +90,7 @@
         "css" : "templates/template_2.css"},
       "displayDuration" : 0,
       "timeFrames" : {
-        "dates" : ["2017-04-01", "2017-04-30"],
+        "dates" : ["2016-04-01", "2016-04-30"],
         "weekly" : [
           {
             "days" : [1, 2, 3],
