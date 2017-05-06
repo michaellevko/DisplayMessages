@@ -5,14 +5,17 @@
  * data and templates accordingly.
  */
 function refreshDisplay() {
-    // Check messages only for /screen routes
-    var h = $('body > h1');
-    if (h[0].innerHTML.indexOf('Screen') > -1) {
-        // request messages from server based on screenId
-        var screenId = (h[0].innerHTML.split('-'))[1];
+    // Check if title hold Screen-X so that getCurrMessage only for /screen
+    var t = $('title');
+    if (t[0].innerHTML.indexOf('Screen') > -1) {
+        // ajax request for messages from server based on screenId
+        var screenId = (t[0].innerHTML.split('-'))[1];
         $.get('/update/' + screenId, function (messages) {
             var currMsg = getCurrMessage(messages);
-            loadDisplay(currMsg);
+            // loadDisplay if currMsg is changed from previous msg
+            if ($('body > h1').text() !== currMsg.name) {
+                loadDisplay(currMsg);
+            }
             setTimeout('refreshDisplay()', 10000);
         });
     }
@@ -58,10 +61,12 @@ function getCurrMessage(messages) {
 function loadDisplay(message) {
     if (message !== undefined) {
         $("div#parent").load(message.template.html + " #container", function () {
+            // setTitle(message.name);
             setMsgData(message);
             setCSS(message.template.css);
         });
     } else {
+        // setTitle(message.name);
         $("div#parent").load("templates/default.html #default");
         setCSS("");
     }
@@ -71,6 +76,7 @@ function loadDisplay(message) {
  * Inserts textFields and imgFields of message to template
  */
 function setMsgData(message) {
+    $('body > h1').text(message.name);
     var textFields = $(".text");
     for (i=0; i<message.texts.length; i++) {
         textFields[i].innerHTML = message.texts[i];
@@ -90,9 +96,24 @@ function setCSS(cssFile) {
         link.remove()
     }
     if (cssFile !== "") {
-        $("head").append("<link id='DynamicCSS' rel='stylesheet' href=" + cssFile + " />");
+        $("head").append("<link id='DynamicCSS' rel='stylesheet' href=" +
+            cssFile + " />");
     }
 }
+
+// /*
+//  * Replaces current css in index.html with template_x.css
+//  */
+// function setTitle(msgName) {
+//     var title = $('title#msgName');
+//     if (title.length > 0) {
+//         title.remove()
+//     }
+//     if (msgName !== "") {
+//         $("head").append("<title id='msgName'>" + msgName + "</title>");
+//
+//     }
+// }
 
 /*
  * Checks if message yyyy-mm match current date.
