@@ -61,12 +61,10 @@ function getCurrMessage(messages) {
 function loadDisplay(message) {
     if (message !== undefined) {
         $("div#parent").load(message.template.html + " #container", function () {
-            // setTitle(message.name);
             setMsgData(message);
             setCSS(message.template.css);
         });
     } else {
-        // setTitle(message.name);
         $("div#parent").load("templates/default.html #default");
         setCSS("");
     }
@@ -100,20 +98,6 @@ function setCSS(cssFile) {
             cssFile + " />");
     }
 }
-
-// /*
-//  * Replaces current css in index.html with template_x.css
-//  */
-// function setTitle(msgName) {
-//     var title = $('title#msgName');
-//     if (title.length > 0) {
-//         title.remove()
-//     }
-//     if (msgName !== "") {
-//         $("head").append("<title id='msgName'>" + msgName + "</title>");
-//
-//     }
-// }
 
 /*
  * Checks if message yyyy-mm match current date.
