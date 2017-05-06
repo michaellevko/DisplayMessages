@@ -18,4 +18,4 @@ Task-2 instructions
 3. Browsing at "http://127.0.0.1:8080/" will display the default route with same
     instructions as previous step.
 4. Messages information is saved on messages.json.
-    4.1 Edit the json file to application behavior.
+    4.1 Edit the json file to test application behavior for different message details.
