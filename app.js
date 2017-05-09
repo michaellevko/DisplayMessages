@@ -37,19 +37,15 @@ app.get("/update/:screenId", function(request,response){
  */
 app.get('/screen=:id', function (request, response) {
     var screenId = request.params.id;
-    response.render('index', { title: 'Screen-' + screenId })
+    response.render('screen', { title: 'Screen-' + screenId })
 });
 
 /*
  * default route for DisplayMessages app
- * returns index.pug template with default message
+ * returns layout.pug template with default message
  */
 app.get('/', function (request, response) {
-    response.render('index', { title: 'Default Route' ,
-        messageName: 'DisplayMessages',
-        defaultRoute: 'To view messages, please browse at ' +
-        '"http://127.0.0.1:8080/screen=X" where "X" is the ' +
-        'screen id ranging from 1-3.'})
+    response.render('index', { title: 'Default Route' })
 });
 
 // fire up the engines ! ==================================

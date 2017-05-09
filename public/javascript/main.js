@@ -7,18 +7,14 @@
 function refreshDisplay() {
     // Check if title hold Screen-X so that getCurrMessage only for /screen
     var t = $('title');
-    if (t[0].innerHTML.indexOf('Screen') > -1) {
         // ajax request for messages from server based on screenId
         var screenId = (t[0].innerHTML.split('-'))[1];
         $.get('/update/' + screenId, function (messages) {
             var currMsg = getCurrMessage(messages);
-            // loadDisplay if currMsg is changed from previous msg
-            if ($('body > h1').text() !== currMsg.name) {
-                loadDisplay(currMsg);
-            }
+            loadDisplay(currMsg);
             setTimeout('refreshDisplay()', 10000);
         });
-    }
+    // }
 }
 
 // /*
