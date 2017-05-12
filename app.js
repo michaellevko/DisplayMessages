@@ -58,18 +58,6 @@ io.sockets.on('connection', function (client) {
             }
         });
     });
-    client.on('messages', function (screenId) {
-        // get all messages of screenId from mongo db
-        mongo.getMsgByScreenId(screenId, function (err, docs) {
-            if (!err) {
-                client.emit('messages', docs);
-            }
-            else {
-                console.log('Database Error: ' + err);
-                client.emit('messages', []);
-            }
-        });
-    });
     client.on('disconnect', function () {
         // remove client from clients associative array
         delete clients[client.screenId];
@@ -96,13 +84,24 @@ app.get('/TestUpdate', function (request, response) {
                 msg.screenIds.push(screenId);
             }
             // add msg to msgCollection in mongo
-            mongo.addMsgToCollection(msg, function (err) {
+            mongo.addMsgToCollection(msg, function (err, status) {
                 // if success then emit new msg to client
                 // and render success message to html
                 if (!err) {
-                    io.sockets.connected[clients[screenId]].emit('addMsg', msg);
-                    response.render('testUpdateResponse',
-                        {updateStatus: 'New Message Updated'});
+                    if (!io.sockets.connected[clients[screenId]]) {
+                        io.sockets.connected[clients[screenId]]
+                            .emit('addMsg', msg);
+                        response.render('testUpdateResponse',
+                            {updateStatus: 'New Message ' + status});
+                    }
+                    else {
+                        console.log('No connected client with screenId:' +
+                            ' ' + screenId);
+                        response.render('testUpdateResponse',
+                            {updateStatus: 'New Message ' + status + '. ' +
+                                'However, no connected client with ' +
+                                'screenId: ' + screenId});
+                    }
                 }
                 // if failure then render failure message to html
                 else {

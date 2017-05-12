@@ -12,9 +12,6 @@ server.on('init', function (data) {
     messages = data;
     refreshDisplay();
 });
-server.on('messages', function (data) {
-    messages = data;
-});
 server.on('addMsg', function (data) {
     messages.push(data);
     if (messages.length > 10) {
