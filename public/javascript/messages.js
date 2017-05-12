@@ -1,3 +1,15 @@
+// Global Variables
+var screenId = 0;
+var messages = [];
+
+/*
+ * Initializes messages variable with messages array of current screenId
+ */
+function initMessages() {
+    var t = $('title');
+    screenId = (t[0].innerHTML.split('-'))[1];
+    server.emit('init', parseInt(screenId));
+}
 
 /*
  * Callback function to refresh the display by
@@ -5,16 +17,9 @@
  * data and templates accordingly.
  */
 function refreshDisplay() {
-    // Check if title hold Screen-X so that getCurrMessage only for /screen
-    var t = $('title');
-        // ajax request for messages from server based on screenId
-        var screenId = (t[0].innerHTML.split('-'))[1];
-        $.get('/update/' + screenId, function (messages) {
-            var currMsg = getCurrMessage(messages);
-            loadDisplay(currMsg);
-            setTimeout('refreshDisplay()', 10000);
-        });
-    // }
+    var currMsg = getCurrMessage(messages);
+    loadDisplay(currMsg);
+    setTimeout('refreshDisplay()', 10000);
 }
 
 // /*

@@ -1,0 +1,20 @@
+{
+  "name" : "NEW_MESSAGE",
+  "texts" : [
+    "SomeText_1...", "SomeText_2...", "SomeText_3...", "SomeText_4...", "SomeText_5..."],
+  "images" : [
+    "Images/SampleImage1.jpg", "Images/SampleImage2.jpg", "Images/SampleImage3.jpg"],
+  "template" : {
+    "html" : "templates/template_1.html",
+    "css" : "templates/template_1.css"},
+  "displayDuration" : 0,
+  "timeFrames" : {
+    "dates" : ["2017-01-01", "2017-12-31"],
+    "weekly" : [
+      {
+        "days" : [0, 1, 2, 3, 4, 5, 6],
+        "hours" : ["00:00", "23.59"]
+      }
+    ]},
+  "screenIds" : []
+}

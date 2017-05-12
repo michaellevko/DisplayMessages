@@ -39,3 +39,36 @@ exports.getMsgByScreenId = function(screenId, callback){
         }
     }); // end mongoClient.connect
 };
+/*
+ * inserts given msg to msgCollection
+ * returns error variable
+ */
+exports.addMsgToCollection = function(msg, callback){
+    mongoClient.connect(url, function(err, db) {
+        var onErr = function(err, callback) {
+            db.close();
+            callback(err);
+        };
+        if (!err) {
+            db.collection(collectionName, function (err, collection) {
+                if (!err) {
+                    collection.insert(msg, function (err) {
+                        if (!err) {
+                            db.close();
+                            callback(err);
+                        }
+                        else {
+                            onErr(err, callback);
+                        }
+                    }); // end collection.find
+                }
+                else {
+                    onErr(err, callback);
+                }
+            }); // end db.collection
+        }
+        else {
+            onErr(err, callback);
+        }
+    }); // end mongoClient.connect
+};
